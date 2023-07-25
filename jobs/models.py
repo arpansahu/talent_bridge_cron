@@ -15,6 +15,7 @@ class Jobs(AbstractBaseModel):
     required_skills = models.ManyToManyField(Skills, related_name='skills')
     required_experience = models.IntegerField(blank=True, null=True)
     location = models.ManyToManyField(Locations, related_name='locations')
+    location_str = models.CharField(max_length=200, null=True)
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, related_name='company', null=True)
     date = models.DateTimeField(auto_now_add=True, blank=True)
     job_id = models.CharField(max_length=300, null=False, blank=False)
