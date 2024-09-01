@@ -106,6 +106,8 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 ITEM_PIPELINES = {
-    'scraper.pipelines.JobsPipeline': 300,
+    # 'scraper.pipelines.JobsPipeline': 300,
     # 'scraper.pipelines.SqliteDemoPipeline': 800,
 }
+
+ROBOTSTXT_OBEY = False

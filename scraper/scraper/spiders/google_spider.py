@@ -15,6 +15,15 @@ class GoogleJobsSpider(scrapy.Spider):
         for link in job_links:
             full_link = response.urljoin(link)
             yield scrapy.Request(url=full_link, callback=self.parse_job_details)
+        
+        # Handle pagination
+        next_page = response.xpath('//a[contains(@class, "WpHeLc") and contains(@aria-label, "next page")]/@href').get()
+        print("================================================================")
+        print(next_page)
+        print("================================================================")
+        if next_page:
+            print("inside next page")
+            yield response.follow(next_page, callback=self.parse)
 
     def parse_job_details(self, response):
         # Extract the raw title
