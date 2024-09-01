@@ -23,10 +23,10 @@ class GoogleJobsSpider(scrapy.Spider):
         # Split the title on commas
         title_parts = raw_title.split(',') if raw_title else []
         
-        # Assign title, category, and subcategory based on the split parts
+        # Assign title, category, and sub_category based on the split parts
         title = title_parts[0].strip() if len(title_parts) > 0 else None
         category = title_parts[1].strip() if len(title_parts) > 1 else None
-        subcategory = title_parts[2].strip() if len(title_parts) > 2 else None
+        sub_category = title_parts[2].strip() if len(title_parts) > 2 else None
         
         # Extract visible locations
         visible_locations = response.xpath("//span[contains(@class, 'pwO9Dc vo5qdf')]//span[contains(@class, 'r0wTof')]/text()").getall()
@@ -59,11 +59,11 @@ class GoogleJobsSpider(scrapy.Spider):
             f"{responsibilities or ''}"
         )
         
-        # Yield the item with title, category, subcategory, company name, and post content
+        # Yield the item with title, category, sub_category, company name, and post content
         yield {
             'title': title,
             'category': category,
-            'subcategory': subcategory,
+            'sub_category': sub_category,
             'locations': list(cleaned_locations),  # Convert the set back to a list for JSON serialization
             'job_url': job_url,  # Include the complete job URL
             'job_id': job_id,  # Extracted job ID
