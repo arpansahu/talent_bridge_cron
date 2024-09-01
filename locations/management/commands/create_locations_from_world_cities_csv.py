@@ -6,7 +6,7 @@ import unicodedata
 class Command(BaseCommand):
     def handle(self, *args, **options):
         print('----------------------------Started Location Creations--------------------------------')
-        df = pd.read_csv('worldcities.csv')
+        df = pd.read_csv('world_cities.csv')
         df = df.filter(items=['city_ascii', 'country', 'iso2', 'iso3', 'admin_name'])
 
         def normalize_text(text):
