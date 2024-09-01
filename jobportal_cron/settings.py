@@ -26,8 +26,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-WINDSCRIBE_USERNAME = config('WINDSCRIBE_USERNAME')
-WINDSCRIBE_PASSWORD = config('WINDSCRIBE_PASSWORD')
+# WINDSCRIBE_USERNAME = config('WINDSCRIBE_USERNAME')
+# WINDSCRIBE_PASSWORD = config('WINDSCRIBE_PASSWORD')
 
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(' ')
@@ -189,9 +189,9 @@ MAIL_JET_API_SECRET = config('MAIL_JET_API_SECRET')
 MAIL_JET_EMAIL_ADDRESS = config('MAIL_JET_EMAIL_ADDRESS')
 
 #Caching
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config('REDISCLOUD_URL'),
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": config('REDISCLOUD_URL'),
+#     }
+# }
