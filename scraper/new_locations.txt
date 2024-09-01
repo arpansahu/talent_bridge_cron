@@ -1,1 +1,82 @@
 Added new location based on following details São Paulo and Brazil
+Added new location: Boulder, CO
+Added new location: Bengaluru, Karnataka
+Added new location: Papillion, NE
+Added new location: Mountain View, CA
+Added new location: Gurugram, Haryana
+Added new location: Bengaluru, Karnataka
+Added new location: Bengaluru, Karnataka
+Added new location: San Diego, CA
+Added new location: Los Angeles, CA
+Added new location: Mountain View, CA
+Added new location: San Francisco, CA
+Added new location: Sunnyvale, CA
+Added new location: Boulder, CO
+Added new location: Sunnyvale, CA
+Added new location: Boulder, CO
+Added new location: Bengaluru, Karnataka
+Added new location: Gurugram, Haryana
+Added new location: Papillion, NE
+Added new location: Bengaluru, Karnataka
+Added new location: Mountain View, CA
+Added new location: Bengaluru, Karnataka
+Added new location: Mountain View, CA
+Added new location: Los Angeles, CA
+Added new location: San Francisco, CA
+Added new location: San Diego, CA
+Added new location: Sunnyvale, CA
+Added new location: Boulder, CO
+Added new location: Sunnyvale, CA
+Added new location: Boulder, CO
+Added new location: Bengaluru, Karnataka
+Added new location: Mountain View, CA
+Added new location: Bengaluru, Karnataka
+Added new location: Gurugram, Haryana
+Added new location: Papillion, NE
+Added new location: Bengaluru, Karnataka
+Added new location: San Diego, CA
+Added new location: San Francisco, CA
+Added new location: Los Angeles, CA
+Added new location: Mountain View, CA
+Added new location: Sunnyvale, CA
+Added new location: Boulder, CO
+Added new location: Sunnyvale, CA
+Added new location: Boulder, CO
+Added new location: Mountain View, CA
+Added new location: Bengaluru, Karnataka
+Added new location: Gurugram, Haryana
+Added new location: Papillion, NE
+Added new location: Bengaluru, Karnataka
+Added new location: Bengaluru, Karnataka
+Added new location: Mountain View, CA
+Added new location: San Francisco, CA
+Added new location: Los Angeles, CA
+Added new location: San Diego, CA
+Added new location: Sunnyvale, CA
+Added new location: Bengaluru, Karnataka
+Added new location: Gurugram, Haryana
+Added new location: Papillion, NE
+Added new location: Mountain View, CA
+Added new location: Bengaluru, Karnataka
+Added new location: San Diego, CA
+Added new location: Bengaluru, Karnataka
+Added new location: Los Angeles, CA
+Added new location: Mountain View, CA
+Added new location: San Francisco, CA
+Added new location: Bengaluru, Karnataka
+Added new location: Mountain View, CA
+Added new location: Gurugram, Haryana
+Added new location: Papillion, NE
+Added new location: Bengaluru, Karnataka
+Added new location: San Diego, CA
+Added new location: Bengaluru, Karnataka
+Added new location: Mountain View, CA
+Added new location: Los Angeles, CA
+Added new location: San Francisco, CA
+Added new location: Bengaluru, Karnataka
+Added new location: Papillion, NE
+Added new location: Gurugram, Haryana
+Added new location: Mountain View, CA
+Added new location: San Diego, CA
+Added new location: San Francisco, CA
+Added new location: Los Angeles, CA

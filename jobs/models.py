@@ -9,7 +9,7 @@ from jobportal_cron.models import AbstractBaseModel
 
 class Jobs(AbstractBaseModel):
     title = models.CharField(max_length=300, null=False)
-    category = models.CharField(max_length=300)
+    category = models.CharField(max_length=300, default='')
     sub_category = models.CharField(max_length=300, default='')
     post = models.CharField(max_length=100000)
     required_skills = models.ManyToManyField(Skills, related_name='skills')
