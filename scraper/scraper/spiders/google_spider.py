@@ -7,6 +7,9 @@ import boto3
 from scrapy.utils.project import get_project_settings
 from scrapy import signals
 import re
+from jobs.models import Jobs, JobLocation
+from asgiref.sync import sync_to_async
+from tqdm import tqdm
 
 class GoogleJobsSpider(scrapy.Spider):
     name = 'google_spider'
@@ -50,7 +53,13 @@ class GoogleJobsSpider(scrapy.Spider):
         self.profile_name = "portfolio"  # Replace with the actual profile name
         self.project_name = settings.get('PROJECT_NAME')  # Replace with the actual project name
 
+        # Initialize the tqdm progress bar
+        self.progress_bar = tqdm(total=0, desc='Processing Jobs', unit='job')
+
     def spider_closed(self, spider):
+        # Close the progress bar
+        self.progress_bar.close()
+
         # Upload the log file to S3 after the spider closes
         upload_successful = self.upload_log_to_s3(self.log_filename)
         
@@ -75,7 +84,7 @@ class GoogleJobsSpider(scrapy.Spider):
             self.logger.error(f"Failed to upload log file to S3: {e}")
             return False
 
-    def parse(self, response):
+    async def parse(self, response):
         self.logger.info("Parsing jobs list from %s", response.url)
         # Collect all "Learn More" links
         job_links = response.xpath("//li[contains(@class, 'lLd3Je')]//a[contains(@class, 'WpHeLc')]/@href").getall()
@@ -84,8 +93,21 @@ class GoogleJobsSpider(scrapy.Spider):
 
         for link in job_links:
             full_link = response.urljoin(link)
+            job_id = full_link.split('/')[-1].split('-')[0]
+
             self.logger.info("Found job link: %s", full_link)
-            yield scrapy.Request(url=full_link, callback=self.parse_job_details)
+            self.logger.info("Found job id: %s", job_id)
+
+            # Check if the job is already in the database asynchronously
+            job_exists = await sync_to_async(Jobs.objects.filter(job_id=job_id).exists)()
+
+            if not job_exists:
+                self.logger.info("New job found, scraping: %s", full_link)
+                self.progress_bar.total += 1  # Increment the total count in the progress bar
+                self.progress_bar.update(1)   # Update the progress bar for each new job found
+                yield scrapy.Request(url=full_link, callback=self.parse_job_details)
+            else:
+                self.logger.info("Job already scraped, skipping: %s", full_link)
 
         # Handle pagination
         next_page = response.xpath('//a[contains(@class, "WpHeLc") and contains(@aria-label, "next page")]/@href').get()
