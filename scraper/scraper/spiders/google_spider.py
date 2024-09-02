@@ -217,7 +217,7 @@ class GoogleJobsSpider(scrapy.Spider):
                     new_location = {'location': cleaned_location.strip(), 'remote': default_remote}
                     if new_location not in processed_locations:
                         processed_locations.append(new_location)
-                        
+
                 elif 'UK' in loc:
                     # Case 1 : When ['London, UK'] UK is present is ISO2 code but its GB in the Database. Replace it with GB.
                     new_loc = loc.replace('UK', 'GB')
@@ -228,7 +228,7 @@ class GoogleJobsSpider(scrapy.Spider):
 
                 elif loc in city_states_and_sar:
                     # Case 2 : When SAR or City States are present in one word itself.
-                    new_location = city_states_and_sar[loc].strip()
+                    new_location = {'location': city_states_and_sar[loc].strip(), 'remote': default_remote}
                     if new_location not in processed_locations:
                         processed_locations.append(new_location)
 
