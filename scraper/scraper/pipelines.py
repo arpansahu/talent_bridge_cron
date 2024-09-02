@@ -74,11 +74,20 @@ def write_item_to_db(item, logger):
 def process_locations(locations, logger):
     logger.info("Processing locations")
     locations_objects_array = []
-    locations_str = None
+
 
     for loc in locations:
         try:
-            parts = [unidecode(part) for part in loc.split(', ')]
+            loc_element = loc['location']
+            loc_remote = loc['remote']    
+
+            loc_dict = {
+                'location_object': None,
+                'remote': loc_remote,
+                'locations_str': None
+            }
+
+            parts = [unidecode(part) for part in loc_element.split(', ')]
             logger.debug(f"Processing parts: {parts}")
 
             city = None
@@ -114,10 +123,20 @@ def process_locations(locations, logger):
 
             if location_object:
                 logger.info(f"Location found and appended: {location_object}")
-                locations_objects_array.append(location_object)
+                loc_dict['location_object'] = location_object
             else:
-                logger.warning(f"Not a valid location: city={city}, state={state}, country={country} for location string: {loc}")
-                locations_str = loc
+                logger.warning(f"Location Object Not Found for {loc_element} Try to Create a New location")
+                
+                # Case When Remote is Present with Country
+                if 'Remote' in loc_element:
+                    location_object_created = create_remote_location(loc_element)
+
+                    if location_object_created:
+                        loc_dict['location_object'] = location_object_created
+
+                else:    
+                    logger.warning(f"Not a valid location : city={city}, state={state}, country={country} for location string: {loc_element} and {loc_element} was assigned to locations_str")
+                    loc_dict['locations_str'] = loc_element
 
         except ValueError as e:
             logger.error(f"Failed to process location {loc}: {str(e)}")
@@ -139,3 +158,24 @@ def find_location(city=None, state=None, country=None):
 
 def save_unknown_location(city, country_or_state, logger):
     logger.warning(f"Unknown location: city={city}, state/country={country_or_state}")
+
+def create_remote_location(loc_element):
+    if 'Remote' in loc_element and loc_element.count(',')==2:
+        city, state, country = loc_element.split(',')
+        country_iso2 = Locations.objects.get(country=country).first().country_code_iso2
+        country_iso3 = Locations.objects.get(country=country).first().country_code_iso3
+        
+        location_instance = Locations(
+            city=city,
+            country=country,
+            country_code_iso2=country_iso2,
+            country_code_iso3=country_iso3,
+            state = state,
+        )
+
+        logger.info(f"New Remote Location Created for : {loc_element}")
+        location_instance.save()
+        logger.info("Added Location with location_instance id %s", location_instance.id)
+
+        return location_instance
+

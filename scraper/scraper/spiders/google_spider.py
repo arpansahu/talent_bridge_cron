@@ -139,10 +139,7 @@ class GoogleJobsSpider(scrapy.Spider):
             'post': post,  # Constructed HTML post content with <b> and <br> tags
         }
 
-
-
     def process_locations(locations):
-
         city_states_and_sar = {
             # City States
             'Singapore': 'Singapore, Singapore',
@@ -155,7 +152,7 @@ class GoogleJobsSpider(scrapy.Spider):
             'Hong Kong': 'Hong Kong, Hong Kong',
             'Macau': 'Macau, Macau'
         }
-
+        
         processed_locations = []
         in_office_location = None
         remote_location = None
@@ -168,7 +165,7 @@ class GoogleJobsSpider(scrapy.Spider):
                 in_office_location = loc.split(':')[-1].strip()
                 index_to_remove = count
             elif 'Remote location:' in loc:
-                remote_location = f"Remote, Remote, {loc.split(':')[-1].strip()}"
+                remote_location = f"{loc.split(':')[-1].strip('.')}"
                 index_to_remove = count
 
             count += 1  # Increment count
@@ -187,7 +184,7 @@ class GoogleJobsSpider(scrapy.Spider):
                 processed_locations.append({'location': loc.strip(), 'remote': False})
             elif remote_location and remote_location.endswith(loc.strip()):
                 # If the location matches the specified remote location, it is remote
-                processed_locations.append({'location': remote_location, 'remote': True})
+                processed_locations.append({'location': f'Remote, Remote, {loc}', 'remote': True})
             else:
                 # All other locations use the default remote status
                 if 'UK' in loc:
@@ -199,6 +196,10 @@ class GoogleJobsSpider(scrapy.Spider):
                     # Case 2 : When  SAR  or City States are preset in one word itself.
                     new_location = city_states_and_sar[loc]
                     processed_locations.append({'location': new_location, 'remote': default_remote})
+
+                elif ',' not in loc and default_remote == True:
+                    # Case 3: When loc is a Country only and default_remote is True
+                    processed_locations.append({'location': f'Remote, Remote, {loc}', 'remote': default_remote})
                 else:
                     processed_locations.append({'location': loc.strip(), 'remote': default_remote})
 
