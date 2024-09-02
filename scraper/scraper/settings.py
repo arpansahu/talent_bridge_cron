@@ -126,7 +126,7 @@ ROBOTSTXT_OBEY = False
 # AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0  # Average number of requests to send in parallel
 # AUTOTHROTTLE_DEBUG = True  # Enable for debugging
 
-# DOWNLOAD_DELAY = random.uniform(30, 80)  # Random delay between requests
+DOWNLOAD_DELAY = random.uniform(30, 80)  # Random delay between requests
 
 HTTPCACHE_ENABLED = True
 HTTPCACHE_EXPIRATION_SECS = 86400  # 24 hours (24 * 60 * 60 seconds)

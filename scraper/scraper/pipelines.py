@@ -28,14 +28,19 @@ class JobsPipeline:
 @sync_to_async
 @transaction.atomic
 def write_item_to_db(item, logger):
-    logger.info("Processing item with job id %s", item['job_id'])
+    logger.info("Processing item with job id %s", item['locations'])
 
     # Check if the job already exists
     if not Jobs.objects.filter(company__name=item['company'], job_id=item['job_id']).exists():
         logger.info(f"JOB url: {item['job_url']}")
-        logger.debug(f"Item details: {item}")
+        logger.info(f"JOB locations: {item['locations']}")
 
-        locations_objects_array, locations_str = process_locations(item['locations'], logger)
+        locations_objects_array = process_locations(item['locations'], logger,item['job_url'])
+        
+        logger.info(f"==============Locations are processed successfully {locations_objects_array}=============")
+
+        any_remote = any(obj['remote'] for obj in locations_objects_array)
+        any_non_remote = any(not obj['remote'] for obj in locations_objects_array)
 
         try:
             # Retrieve the company object
@@ -58,7 +63,8 @@ def write_item_to_db(item, logger):
             sub_category=sub_category,
             job_url=item['job_url'],
             post=item['post'],
-            location_str=locations_str
+            remote=any_remote,
+            in_office=any_non_remote,
         )
 
         # Save the job instance to the database
@@ -71,22 +77,22 @@ def write_item_to_db(item, logger):
     else:
         logger.info("Job with job id %s already exists", item['job_id'])
 
-def process_locations(locations, logger):
-    logger.info("Processing locations")
+def process_locations(locations, logger, job_url):
+    logger.info(f"Processing locations {locations}")
     locations_objects_array = []
 
-
+    logger.info("Calling For loop")
     for loc in locations:
         try:
+            logger.info("checkpoint 1")
             loc_element = loc['location']
             loc_remote = loc['remote']    
-
+            logger.info("checkpoint 2")
             loc_dict = {
                 'location_object': None,
                 'remote': loc_remote,
-                'locations_str': None
             }
-
+            logger.info("checkpoint 3")
             parts = [unidecode(part) for part in loc_element.split(', ')]
             logger.debug(f"Processing parts: {parts}")
 
@@ -116,7 +122,7 @@ def process_locations(locations, logger):
                 elif not country and Locations.objects.filter(country_code_iso3=part).exists():
                     country = Locations.objects.filter(country_code_iso3=part).first().country
                     logger.info(f"Matched as ISO3 country: {country}")
-
+            
             logger.info(f"Final location: city={city}, state={state}, country={country}")
             # Construct a query to find the location object
             location_object = find_location(city, state, country)
@@ -135,15 +141,17 @@ def process_locations(locations, logger):
                         loc_dict['location_object'] = location_object_created
 
                 else:    
-                    logger.warning(f"Not a valid location : city={city}, state={state}, country={country} for location string: {loc_element} and {loc_element} was assigned to locations_str")
-                    loc_dict['locations_str'] = loc_element
+                    logger.warning(f"Skipping item due to location: {loc_element}")
+                    raise IgnoreRequest(f"Skipping item due to location: {loc_element} {job_url}")
+
+            locations_objects_array.append(loc_dict)
 
         except ValueError as e:
             logger.error(f"Failed to process location {loc}: {str(e)}")
             locations_str = loc
             save_unknown_location(loc, logger)
 
-    return locations_objects_array, locations_str
+    return locations_objects_array
 
 def find_location(city=None, state=None, country=None):
     filters = Q()
