@@ -1,8 +1,8 @@
 from django.db import models
-from jobportal_cron.storage_backends import PublicMediaStorage
+from talent_bridge_cron.storage_backends import PublicMediaStorage
 
 # Create your models here.
-from jobportal_cron.models import AbstractBaseModel
+from talent_bridge_cron.models import AbstractBaseModel
 
 
 class Company(AbstractBaseModel):

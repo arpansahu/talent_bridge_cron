@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 # Create your models here.
-from jobportal_cron.models import AbstractBaseModel
+from talent_bridge_cron.models import AbstractBaseModel
 
 
 class MyAccountManager(BaseUserManager):

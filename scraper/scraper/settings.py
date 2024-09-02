@@ -20,7 +20,7 @@ django_path = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(django_path) + "/")
 
 # Setup django. Allows us to perform database related operations importing models from dj project.
-os.environ['DJANGO_SETTINGS_MODULE'] = 'jobportal_cron.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'talent_bridge_cron.settings'
 django.setup()
 
 BOT_NAME = "scraper"

@@ -1,5 +1,5 @@
 """
-WSGI config for jobportal_cron project.
+WSGI config for talent_bridge_cron project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'jobportal_cron.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'talent_bridge_cron.settings')
 
 application = get_wsgi_application()

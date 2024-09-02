@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-from jobportal_cron.models import AbstractBaseModel
+from talent_bridge_cron.models import AbstractBaseModel
 
 
 class Skills(AbstractBaseModel):

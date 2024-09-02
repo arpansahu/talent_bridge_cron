@@ -3,7 +3,7 @@ from skills.models import Skills
 from companies.models import Company
 from locations.models import Locations
 
-from jobportal_cron.models import AbstractBaseModel
+from talent_bridge_cron.models import AbstractBaseModel
 
 class JobLocation(AbstractBaseModel):
     job = models.ForeignKey('jobs.Jobs', on_delete=models.CASCADE, db_column='jobs_id')
