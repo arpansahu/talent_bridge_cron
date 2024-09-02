@@ -5,7 +5,7 @@ from django.db import transaction
 from django.db.models import Q
 from companies.models import Company
 from locations.models import Locations
-from jobs.models import Jobs
+from jobs.models import Jobs, JobLocation
 
 class JobsPipeline:
 
@@ -55,6 +55,7 @@ def write_item_to_db(item, logger):
         sub_category = item.get('sub_category', '') or ''
 
         # Convert the item dictionary to a Jobs instance using the correct field names
+
         job_instance = Jobs(
             company=company,
             job_id=item['job_id'],
@@ -64,7 +65,7 @@ def write_item_to_db(item, logger):
             job_url=item['job_url'],
             post=item['post'],
             remote=any_remote,
-            in_office=any_non_remote,
+            in_office=any_non_remote
         )
 
         # Save the job instance to the database
@@ -72,7 +73,19 @@ def write_item_to_db(item, logger):
         logger.info("Added Job with job id %s", job_instance.job_id)
 
         # Assign the locations to the job item
-        job_instance.location.add(*locations_objects_array)
+        for location_data in locations_objects_array:
+            JobLocation.objects.create(
+                job=job_instance,
+                location=location_data['location_object'],
+                remote=location_data['remote']
+            )
+            logger.info(
+                "Added location %s (remote: %s) to job id %s", 
+                location_data['location_object'], 
+                location_data['remote'], 
+                job_instance.job_id,
+            )
+
         logger.info("Updated Locations for job id %s", job_instance.job_id)
     else:
         logger.info("Job with job id %s already exists", item['job_id'])

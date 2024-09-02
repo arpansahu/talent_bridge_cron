@@ -7,7 +7,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('----------------------------Started Location Creations--------------------------------')
         df = pd.read_csv('world_cities.csv')
-        df = df.filter(items=['city_ascii', 'country', 'iso2', 'iso3', 'admin_name'])
+        df = df.filter(items=['City', 'Country', 'ISO2', 'ISO3', 'State'])
 
         def normalize_text(text):
             # Normalize the text to remove any diacritical marks
@@ -19,11 +19,11 @@ class Command(BaseCommand):
                 print(row)
 
                 # Normalize each field
-                normalized_city = normalize_text(row['city_ascii'])
-                normalized_country = normalize_text(row['country'])
-                normalized_iso2 = normalize_text(row['iso2'])
-                normalized_iso3 = normalize_text(row['iso3'])
-                normalized_state = normalize_text(row['admin_name'])
+                normalized_city = normalize_text(row['City'])
+                normalized_country = normalize_text(row['Country'])
+                normalized_iso2 = normalize_text(row['ISO2'])
+                normalized_iso3 = normalize_text(row['ISO3'])
+                normalized_state = normalize_text(row['State'])
 
                 Locations.objects.create(
                     city=normalized_city,

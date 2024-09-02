@@ -51,7 +51,17 @@ class GoogleJobsSpider(scrapy.Spider):
 
     def spider_closed(self, spider):
         # Upload the log file to S3 after the spider closes
-        self.upload_log_to_s3(self.log_filename)
+        upload_successful = self.upload_log_to_s3(self.log_filename)
+        
+        # if upload_successful:
+        #     # Delete the local log file after successful upload
+        #     try:
+        #         os.remove(self.log_filename)
+        #         spider.logger.info("Successfully deleted the local log file: %s", self.log_filename)
+        #     except OSError as e:
+        #         spider.logger.error("Error deleting the log file: %s - %s", self.log_filename, str(e))
+        # else:
+        #     spider.logger.error("Failed to upload the log file to S3, so it was not deleted.")
 
     def upload_log_to_s3(self, file_path):
         s3_file_name = f"{self.profile_name}/{self.project_name}/scrapy_logs/{self.name}/{os.path.basename(file_path)}"
@@ -59,8 +69,10 @@ class GoogleJobsSpider(scrapy.Spider):
         try:
             self.s3_client.upload_file(file_path, self.bucket_name, s3_file_name)
             self.logger.info(f"Successfully uploaded {file_path} to S3 as {s3_file_name}")
+            return True
         except Exception as e:
             self.logger.error(f"Failed to upload log file to S3: {e}")
+            return False
 
     def parse(self, response):
         self.logger.info("Parsing jobs list from %s", response.url)
