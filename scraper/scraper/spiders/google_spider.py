@@ -6,6 +6,7 @@ from datetime import datetime
 import boto3
 from scrapy.utils.project import get_project_settings
 from scrapy import signals
+import re
 
 class GoogleJobsSpider(scrapy.Spider):
     name = 'google_spider'
@@ -53,15 +54,15 @@ class GoogleJobsSpider(scrapy.Spider):
         # Upload the log file to S3 after the spider closes
         upload_successful = self.upload_log_to_s3(self.log_filename)
         
-        # if upload_successful:
-        #     # Delete the local log file after successful upload
-        #     try:
-        #         os.remove(self.log_filename)
-        #         spider.logger.info("Successfully deleted the local log file: %s", self.log_filename)
-        #     except OSError as e:
-        #         spider.logger.error("Error deleting the log file: %s - %s", self.log_filename, str(e))
-        # else:
-        #     spider.logger.error("Failed to upload the log file to S3, so it was not deleted.")
+        if upload_successful:
+            # Delete the local log file after successful upload
+            try:
+                os.remove(self.log_filename)
+                spider.logger.info("Successfully deleted the local log file: %s", self.log_filename)
+            except OSError as e:
+                spider.logger.error("Error deleting the log file: %s - %s", self.log_filename, str(e))
+        else:
+            spider.logger.error("Failed to upload the log file to S3, so it was not deleted.")
 
     def upload_log_to_s3(self, file_path):
         s3_file_name = f"{self.profile_name}/{self.project_name}/scrapy_logs/{self.name}/{os.path.basename(file_path)}"
@@ -79,7 +80,7 @@ class GoogleJobsSpider(scrapy.Spider):
         # Collect all "Learn More" links
         job_links = response.xpath("//li[contains(@class, 'lLd3Je')]//a[contains(@class, 'WpHeLc')]/@href").getall()
 
-        job_links = job_links[:1]  # Only take the first link
+        # job_links = job_links[:1]  # Only take the first link
 
         for link in job_links:
             full_link = response.urljoin(link)
@@ -87,12 +88,12 @@ class GoogleJobsSpider(scrapy.Spider):
             yield scrapy.Request(url=full_link, callback=self.parse_job_details)
 
         # Handle pagination
-        # next_page = response.xpath('//a[contains(@class, "WpHeLc") and contains(@aria-label, "next page")]/@href').get()
-        # if next_page:
-        #     self.logger.info("Navigating to next page: %s", next_page)
-        #     yield response.follow(next_page, callback=self.parse)
-        # else:
-        #     self.logger.info("No more pages to navigate.")
+        next_page = response.xpath('//a[contains(@class, "WpHeLc") and contains(@aria-label, "next page")]/@href').get()
+        if next_page:
+            self.logger.info("Navigating to next page: %s", next_page)
+            yield response.follow(next_page, callback=self.parse)
+        else:
+            self.logger.info("No more pages to navigate.")
 
     def parse_job_details(self, response):
         self.logger.info("Parsing job details from %s", response.url)
@@ -207,7 +208,17 @@ class GoogleJobsSpider(scrapy.Spider):
                     processed_locations.append(new_location)
             else:
                 # All other locations use the default remote status
-                if 'UK' in loc:
+                if 'USA' in loc:
+                    # Case 0: When San Diego, CA, USA here CA belongs to ISO2 code of CANADA, so better it ISO3 code is present remove the ISO2 code both cant exists together
+                    # Remove any optional space, followed by a two-character word and a comma
+                    cleaned_location = re.sub(r'\s\w{2},\s*', '', loc)
+                    # Ensure there's exactly one space before 'USA'
+                    cleaned_location = re.sub(r'\s*USA', ' USA', cleaned_location)
+                    new_location = {'location': cleaned_location.strip(), 'remote': default_remote}
+                    if new_location not in processed_locations:
+                        processed_locations.append(new_location)
+                        
+                elif 'UK' in loc:
                     # Case 1 : When ['London, UK'] UK is present is ISO2 code but its GB in the Database. Replace it with GB.
                     new_loc = loc.replace('UK', 'GB')
                     new_location = {'location': new_loc.strip(), 'remote': default_remote}

@@ -6,6 +6,7 @@ from django.db.models import Q
 from companies.models import Company
 from locations.models import Locations
 from jobs.models import Jobs, JobLocation
+from scrapy.exceptions import IgnoreRequest
 
 class JobsPipeline:
 
