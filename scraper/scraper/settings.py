@@ -10,6 +10,8 @@ import os
 import sys
 from pathlib import Path
 import django
+import random
+from django.conf import settings
 
 # Django project root level path
 django_path = Path(__file__).resolve().parent.parent.parent
@@ -22,6 +24,12 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'jobportal_cron.settings'
 django.setup()
 
 BOT_NAME = "scraper"
+
+# Now, you can access Django settings
+AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+AWS_STORAGE_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
+PROJECT_NAME = settings.PROJECT_NAME
 
 SPIDER_MODULES = ["scraper.spiders"]
 NEWSPIDER_MODULE = "scraper.spiders"
@@ -106,8 +114,25 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 ITEM_PIPELINES = {
-    # 'scraper.pipelines.JobsPipeline': 300,
+    'scraper.pipelines.JobsPipeline': 300,
     # 'scraper.pipelines.SqliteDemoPipeline': 800,
 }
 
 ROBOTSTXT_OBEY = False
+
+# AUTOTHROTTLE_ENABLED = True
+# AUTOTHROTTLE_START_DELAY = 15  # Initial delay (in seconds) before making the next request
+# AUTOTHROTTLE_MAX_DELAY = 300  # Maximum delay (in seconds) in case of high latencies
+# AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0  # Average number of requests to send in parallel
+# AUTOTHROTTLE_DEBUG = True  # Enable for debugging
+
+# DOWNLOAD_DELAY = random.uniform(30, 80)  # Random delay between requests
+
+HTTPCACHE_ENABLED = True
+HTTPCACHE_EXPIRATION_SECS = 86400  # 24 hours (24 * 60 * 60 seconds)
+HTTPCACHE_DIR = "httpcache"
+HTTPCACHE_IGNORE_HTTP_CODES = []
+HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
+
+
+LOG_LEVEL = 'INFO'  # or 'DEBUG' for more verbose output

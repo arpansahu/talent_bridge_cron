@@ -21,17 +21,31 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# ============================ENV VARIABLES=====================================
 SECRET_KEY = config('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool, default=False)
-
-# WINDSCRIBE_USERNAME = config('WINDSCRIBE_USERNAME')
-# WINDSCRIBE_PASSWORD = config('WINDSCRIBE_PASSWORD')
-
-
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(' ')
 
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+BUCKET_TYPE = config('BUCKET_TYPE')
+
+DATABASE_URL = config('DATABASE_URL')
+REDIS_CLOUD_URL = config('REDIS_CLOUD_URL')
+
+MAIL_JET_API_KEY = config('MAIL_JET_API_KEY')
+MAIL_JET_API_SECRET = config('MAIL_JET_API_SECRET')
+MAIL_JET_EMAIL_ADDRESS = config('MAIL_JET_EMAIL_ADDRESS')
+
+DOMAIN = config('DOMAIN')
+PROTOCOL = config('PROTOCOL')
+
+SENTRY_ENVIRONMENT = config('SENTRY_ENVIRONMENT')  # production Or "staging", "development", etc.
+SENTRY_DSH_URL = config('SENTRY_DSH_URL')
+
+PROJECT_NAME = 'talent_bridge'
+# ===============================================================================
 
 # Application definition
 
