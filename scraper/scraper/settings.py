@@ -135,4 +135,6 @@ HTTPCACHE_IGNORE_HTTP_CODES = []
 HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
 
-LOG_LEVEL = 'INFO'  # or 'DEBUG' for more verbose output
+LOG_ENABLED = True
+LOG_LEVEL = 'INFO'
+LOG_FILE = None  # Disable Scrapy's default log file creation

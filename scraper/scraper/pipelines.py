@@ -1,42 +1,18 @@
 import logging
-from datetime import datetime
 from unidecode import unidecode
 from asgiref.sync import sync_to_async
 from django.db import transaction
 from django.db.models import Q
-import boto3
 from companies.models import Company
 from locations.models import Locations
 from jobs.models import Jobs
-from scrapy.utils.project import get_project_settings  # Import Scrapy settings
-
 
 class JobsPipeline:
 
-    def __init__(self):
-        self.logger = None
-        self.log_file_name = None
-        settings = get_project_settings()  # Get the Scrapy settings
-
-        # Setup S3 client using settings from Scrapy
-        self.s3_client = boto3.client(
-            's3',
-            aws_access_key_id=settings.get('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=settings.get('AWS_SECRET_ACCESS_KEY')
-        )
-
-        # Store the bucket name and other settings for reuse
-        self.bucket_name = settings.get('AWS_STORAGE_BUCKET_NAME')
-        self.profile_name = "profile"  # Replace with the actual profile name
-        self.project_name = settings.get('PROJECT_NAME')  # Replace with the actual project name
-
     def open_spider(self, spider):
-        # Initialize logger with spider's name and date
-        current_date = datetime.now().strftime('%Y%m%d')
-        self.log_file_name = f"{spider.name}_{current_date}.log"
-        logging.basicConfig(filename=self.log_file_name, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+        # Use the logger provided by the spider
         self.logger = logging.getLogger(spider.name)
-        self.logger.info("Spider started: %s", spider.name)
+        self.logger.info("Pipeline initialized for spider: %s", spider.name)
 
     async def process_item(self, item, spider):
         try:
@@ -46,21 +22,8 @@ class JobsPipeline:
         return item
 
     def close_spider(self, spider):
-        # Final log entry
-        self.logger.info("Spider finished: %s", spider.name)
-        # Upload log file to S3 bucket
-        self.upload_log_to_s3(spider)
-
-    def upload_log_to_s3(self, spider):
-        # Construct the S3 object path
-        current_date = datetime.now().strftime('%Y%m%d')
-        object_name = f"{self.profile_name}/{self.project_name}/logs/{spider.name}/{spider.name}_{current_date}.log"
-
-        try:
-            self.s3_client.upload_file(self.log_file_name, self.bucket_name, object_name)
-            self.logger.info("Successfully uploaded log file to S3: %s", object_name)
-        except Exception as e:
-            self.logger.error("Failed to upload log file to S3: %s", e)
+        # Log the closure of the spider
+        self.logger.info("Pipeline closing for spider: %s", spider.name)
 
 @sync_to_async
 @transaction.atomic
@@ -107,7 +70,6 @@ def write_item_to_db(item, logger):
         logger.info("Updated Locations for job id %s", job_instance.job_id)
     else:
         logger.info("Job with job id %s already exists", item['job_id'])
-
 
 def process_locations(locations, logger):
     logger.info("Processing locations")
@@ -164,7 +126,6 @@ def process_locations(locations, logger):
 
     return locations_objects_array, locations_str
 
-
 def find_location(city=None, state=None, country=None):
     filters = Q()
     if city:
@@ -176,8 +137,5 @@ def find_location(city=None, state=None, country=None):
 
     return Locations.objects.filter(filters).first()
 
-
 def save_unknown_location(city, country_or_state, logger):
-    with open("unknown_locations.txt", "a") as f:
-        f.write(f"Unable to add new location: {city}, {country_or_state}\n")
-    logger.warning(f"Saved unknown location: {city}, {country_or_state}")
+    logger.warning(f"Unknown location: city={city}, state/country={country_or_state}")

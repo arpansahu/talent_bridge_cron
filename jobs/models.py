@@ -23,6 +23,7 @@ class Jobs(AbstractBaseModel):
     reviewed = models.BooleanField(default=False)
     available = models.BooleanField(default=True)
     unavailable_date = models.DateTimeField(null=True, blank=True)
+    remote = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('job_id', 'company')
