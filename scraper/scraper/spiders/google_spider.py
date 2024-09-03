@@ -104,7 +104,7 @@ class GoogleJobsSpider(scrapy.Spider):
             if not job_exists:
                 self.logger.info("New job found, scraping: %s", full_link)
                 self.progress_bar.total += 1  # Increment the total count in the progress bar
-                self.progress_bar.update(1)   # Update the progress bar for each new job found
+
                 yield scrapy.Request(url=full_link, callback=self.parse_job_details)
             else:
                 self.logger.info("Job already scraped, skipping: %s", full_link)

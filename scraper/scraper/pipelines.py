@@ -7,23 +7,35 @@ from companies.models import Company
 from locations.models import Locations
 from jobs.models import Jobs, JobLocation
 from scrapy.exceptions import IgnoreRequest
+import asyncio 
 
 class JobsPipeline:
 
     def open_spider(self, spider):
-        # Use the logger provided by the spider
         self.logger = logging.getLogger(spider.name)
         self.logger.info("Pipeline initialized for spider: %s", spider.name)
 
-    async def process_item(self, item, spider):
+    def process_item(self, item, spider):
         try:
-            await write_item_to_db(item, self.logger)
+            # Schedule the coroutine to be run by the event loop
+            asyncio.create_task(self.write_item(item, spider))
         except Exception as e:
+            spider.progress_bar.update(1)
             self.logger.error("Failed to process item: %s", e)
         return item
 
+    async def write_item(self, item, spider):
+        try:
+            await write_item_to_db(item, self.logger)
+        finally:
+            spider.progress_bar.update(1)  # Ensure progress bar updates regardless of success or failure
+            self.log_progress(spider)
+            
+    def log_progress(self, spider):
+        # Log the progress bar status
+        self.logger.info(f"Progress: {spider.progress_bar.n}/{spider.progress_bar.total} items processed.")
+
     def close_spider(self, spider):
-        # Log the closure of the spider
         self.logger.info("Pipeline closing for spider: %s", spider.name)
 
 @sync_to_async

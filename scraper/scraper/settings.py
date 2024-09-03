@@ -123,7 +123,7 @@ ROBOTSTXT_OBEY = False
 AUTOTHROTTLE_ENABLED = True
 AUTOTHROTTLE_START_DELAY = 15  # Initial delay (in seconds) before making the next request
 AUTOTHROTTLE_MAX_DELAY = 300  # Maximum delay (in seconds) in case of high latencies
-AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0  # Average number of requests to send in parallel
+AUTOTHROTTLE_TARGET_CONCURRENCY = 4.0  # Average number of requests to send in parallel
 AUTOTHROTTLE_DEBUG = True  # Enable for debugging
 
 DOWNLOAD_DELAY = random.uniform(30, 80)  # Random delay between requests
