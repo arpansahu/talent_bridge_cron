@@ -145,3 +145,11 @@ EXTENSIONS = {
 }
 
 CRAWLERSAVESTATS_ENABLED = True  # Make sure the extension is enabled
+
+
+SCRAPEOPS_API_KEY = '9bc6a3fb-5aaa-4259-84de-c2e63147e603'
+SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
+
+DOWNLOADER_MIDDLEWARES = {
+    'scraper.middlewares.ScrapeOpsFakeBrowserHeadersMiddleware': 200,
+}
