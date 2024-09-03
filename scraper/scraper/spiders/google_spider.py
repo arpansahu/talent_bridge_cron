@@ -16,23 +16,11 @@ class GoogleJobsSpider(scrapy.Spider):
     allowed_domains = ['google.com']
     start_urls = ['https://www.google.com/about/careers/applications/jobs/results/']
 
-    # Configure logging to output to a file
-    current_time = datetime.now().strftime('%Y%m%d_%H%M%S')
-    log_filename = f'{name}_{current_time}.log'
-
-    # Configure logging to output to a file
-    configure_logging(install_root_handler=False)
-    logging.basicConfig(
-        filename=log_filename,
-        format='%(levelname)s: %(message)s',
-        level=logging.INFO
-    )
-
-    @classmethod
-    def from_crawler(cls, crawler, *args, **kwargs):
-        spider = super(GoogleJobsSpider, cls).from_crawler(crawler, *args, **kwargs)
-        crawler.signals.connect(spider.spider_closed, signal=signals.spider_closed)
-        return spider
+    # Custom settings specific to this spider
+    custom_settings = {
+        "LOG_FILE": f"{name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log",
+        "LOG_LEVEL": "INFO",  # Ensure logging level is set appropriately
+    }
 
     def __init__(self, *args, **kwargs):
         super(GoogleJobsSpider, self).__init__(*args, **kwargs)
@@ -53,29 +41,70 @@ class GoogleJobsSpider(scrapy.Spider):
         self.profile_name = "portfolio"  # Replace with the actual profile name
         self.project_name = settings.get('PROJECT_NAME')  # Replace with the actual project name
 
-        # Initialize the tqdm progress bar
+        # Progress bar initialization
         self.progress_bar = tqdm(total=0, desc='Processing Jobs', unit='job')
+
+
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super(GoogleJobsSpider, cls).from_crawler(crawler, *args, **kwargs)
+        
+        # Access settings through the crawler instance
+        log_file = crawler.settings.get('LOG_FILE')
+        log_level = crawler.settings.get('LOG_LEVEL')
+
+        # Set up logging
+        spider.setup_logging(log_file, log_level)
+        
+        crawler.signals.connect(spider.spider_closed, signal=signals.spider_closed)
+        return spider
+
+    def setup_logging(self, log_file, log_level):
+        logger = logging.getLogger()
+        logger.setLevel(log_level)
+
+        # File handler for logging to a file
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setLevel(log_level)
+        file_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(message)s'))
+
+        # Console handler for logging to the console
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(log_level)
+        console_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(message)s'))
+
+        # Clear existing handlers, if any
+        if logger.hasHandlers():
+            logger.handlers.clear()
+
+        # Add handlers to the logger
+        logger.addHandler(file_handler)
+        logger.addHandler(console_handler)
 
     def spider_closed(self, spider):
         # Close the progress bar
         self.progress_bar.close()
 
+        # Retrieve the log filename from the settings
+        log_file = self.settings.get('LOG_FILE')
+
         # Upload the log file to S3 after the spider closes
-        upload_successful = self.upload_log_to_s3(self.log_filename)
+        upload_successful = self.upload_log_to_s3(log_file)
         
         if upload_successful:
             # Delete the local log file after successful upload
             try:
-                os.remove(self.log_filename)
-                spider.logger.info("Successfully deleted the local log file: %s", self.log_filename)
+                os.remove(log_file)
+                self.logger.info("Successfully deleted the local log file: %s", log_file)
             except OSError as e:
-                spider.logger.error("Error deleting the log file: %s - %s", self.log_filename, str(e))
+                self.logger.error("Error deleting the log file: %s - %s", log_file, str(e))
         else:
-            spider.logger.error("Failed to upload the log file to S3, so it was not deleted.")
+            self.logger.error("Failed to upload the log file to S3, so it was not deleted.")
 
     def upload_log_to_s3(self, file_path):
-        s3_file_name = f"{self.profile_name}/{self.project_name}/scrapy_logs/{self.name}/{os.path.basename(file_path)}"
-        
+        todays_date = datetime.now().strftime('%Y-%m-%d')
+        s3_file_name = f"{self.profile_name}/{self.project_name}/scrapy_logs/{self.name}/{todays_date}/{os.path.basename(file_path)}"
+
         try:
             self.s3_client.upload_file(file_path, self.bucket_name, s3_file_name)
             self.logger.info(f"Successfully uploaded {file_path} to S3 as {s3_file_name}")
@@ -110,12 +139,12 @@ class GoogleJobsSpider(scrapy.Spider):
                 self.logger.info("Job already scraped, skipping: %s", full_link)
 
         # Handle pagination
-        next_page = response.xpath('//a[contains(@class, "WpHeLc") and contains(@aria-label, "next page")]/@href').get()
-        if next_page:
-            self.logger.info("Navigating to next page: %s", next_page)
-            yield response.follow(next_page, callback=self.parse)
-        else:
-            self.logger.info("No more pages to navigate.")
+        # next_page = response.xpath('//a[contains(@class, "WpHeLc") and contains(@aria-label, "next page")]/@href').get()
+        # if next_page:
+        #     self.logger.info("Navigating to next page: %s", next_page)
+        #     yield response.follow(next_page, callback=self.parse)
+        # else:
+        #     self.logger.info("No more pages to navigate.")
 
     def parse_job_details(self, response):
         self.logger.info("Parsing job details from %s", response.url)
