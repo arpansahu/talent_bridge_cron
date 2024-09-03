@@ -15,6 +15,13 @@ class ProgressBarSpider(scrapy.Spider):
         "LOG_FILE": f"{name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log",
         "LOG_LEVEL": "INFO",  # Ensure logging level is set appropriately
     }
+
+    start_urls = [
+        'https://arpansahu.me',
+        'https://clock-work.arpansahu.me',
+        'https://third-eye.arpansahu.me',
+        # Add more URLs as needed
+    ]
     
     def __init__(self, *args, **kwargs):
         super(ProgressBarSpider, self).__init__(*args, **kwargs)
@@ -35,7 +42,7 @@ class ProgressBarSpider(scrapy.Spider):
         self.project_name = settings.get('PROJECT_NAME')  # Replace with the actual project name
 
         # Progress bar initialization
-        self.progress_bar = tqdm(total=0, desc='Processing Jobs', unit='job')
+        self.progress_bar = tqdm(total=len(self.start_urls), desc='Processing Jobs', unit='job')
 
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
