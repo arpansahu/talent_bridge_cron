@@ -139,12 +139,12 @@ class GoogleJobsSpider(scrapy.Spider):
                 self.logger.info("Job already scraped, skipping: %s", full_link)
 
         # Handle pagination
-        # next_page = response.xpath('//a[contains(@class, "WpHeLc") and contains(@aria-label, "next page")]/@href').get()
-        # if next_page:
-        #     self.logger.info("Navigating to next page: %s", next_page)
-        #     yield response.follow(next_page, callback=self.parse)
-        # else:
-        #     self.logger.info("No more pages to navigate.")
+        next_page = response.xpath('//a[contains(@class, "WpHeLc") and contains(@aria-label, "next page")]/@href').get()
+        if next_page:
+            self.logger.info("Navigating to next page: %s", next_page)
+            yield response.follow(next_page, callback=self.parse)
+        else:
+            self.logger.info("No more pages to navigate.")
 
     def parse_job_details(self, response):
         self.logger.info("Parsing job details from %s", response.url)
