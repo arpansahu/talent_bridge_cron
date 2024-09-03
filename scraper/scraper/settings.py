@@ -136,5 +136,12 @@ HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
 
 LOG_ENABLED = True
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'DEBUG'
 LOG_FILE = None  # Disable Scrapy's default log file creation
+
+# settings.py
+EXTENSIONS = {
+    'scraper.extensions.SaveCrawlStatsExtension': 300,  # Adjust the priority if needed
+}
+
+CRAWLERSAVESTATS_ENABLED = True  # Make sure the extension is enabled

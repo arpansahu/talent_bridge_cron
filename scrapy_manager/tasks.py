@@ -2,48 +2,49 @@ from celery import shared_task
 import requests
 from django.utils import timezone
 from .models import ScrapyJob, ScrapySpider
-import time
+import logging
+import uuid
+
+logger = logging.getLogger(__name__)
 
 @shared_task
 def run_spider(spider_id):
-    spider = ScrapySpider.objects.get(id=spider_id)
-    response = requests.post(f'http://localhost:6800/schedule.json', data={
-        'project': spider.project.name,
-        'spider': spider.name,
-    })
+    try:
+        # Retrieve the spider instance
+        spider = ScrapySpider.objects.get(id=spider_id)
+        logger.info(f"Starting spider: {spider.name} with spider_id: {spider_id}")
 
-    if response.status_code == 200:
-        job_id = response.json().get('jobid')
-        if job_id:
-            job = ScrapyJob.objects.create(
-                spider=spider,
-                job_id=job_id,
-                status='running',
-                start_time=timezone.now()
-            )
+        # Generate a random UUID for the job
+        job_id = str(uuid.uuid4())
 
-            # Polling the Scrapyd API to wait for job completion
-            while True:
-                job_status_response = requests.get(
-                    f'http://localhost:6800/listjobs.json?project={spider.project.name}')
-                if job_status_response.status_code == 200:
-                    jobs_data = job_status_response.json()
-                    
-                    # Check if the job has moved to "finished" or "failed"
-                    if any(j['id'] == job_id for j in jobs_data.get('finished', [])):
-                        job.status = 'finished'
-                        job.end_time = timezone.now()
-                        job.save()
-                        return f'Spider {spider.name} finished with job ID {job_id}'
-                    
-                    if any(j['id'] == job_id for j in jobs_data.get('failed', [])):
-                        job.status = 'failed'
-                        job.end_time = timezone.now()
-                        job.save()
-                        return f'Spider {spider.name} failed with job ID {job_id}'
+        # Schedule the spider with the generated UUID
+        response = requests.post(f'http://localhost:6800/schedule.json', data={
+            'project': spider.project.name,
+            'spider': spider.name,
+            'job_id': job_id  # Pass the generated UUID here
+        })
 
-                time.sleep(10)  # Sleep for 10 seconds before polling again
+        if response.status_code == 200:
+            # Check if the job ID was returned by the scheduling request
+            response_job_id = response.json().get('jobid')
+            if response_job_id:
+                # Create a ScrapyJob entry in the database with the job ID and status
+                job = ScrapyJob.objects.create(
+                    spider=spider,
+                    job_id=job_id,  # Use the generated UUID here
+                    status='running',
+                    start_time=timezone.now()
+                )
+                logger.info(f"ScrapyJob created with job_id: {job_id}")
+                
+                return f'Spider {spider.name} started with job ID {job_id}'
+
+            else:
+                logger.error(f"Failed to retrieve job ID for spider {spider.name}")
+                return f'Failed to retrieve job ID for spider {spider.name}'
         else:
-            return f'Failed to retrieve job ID for spider {spider.name}'
-    else:
-        return f'Failed to start spider {spider.name}'
+            logger.error(f"Failed to start spider {spider.name}. Response status: {response.status_code}")
+            return f'Failed to start spider {spider.name}'
+    except Exception as e:
+        logger.error(f"Unexpected error in run_spider task: {e}")
+        raise
