@@ -266,9 +266,16 @@ MAIL_JET_EMAIL_ADDRESS = config('MAIL_JET_EMAIL_ADDRESS')
 #     }
 # }
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Use Redis or another broker of your choice
+CELERY_RESULT_BACKEND = 'django-db'  # Use Django database to store task results
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+
+# Django-Celery-Results settings
+INSTALLED_APPS += ['django_celery_results']
+
+# Make sure the Django-Celery-Results tables are created
+CELERY_RESULT_BACKEND = 'django-db'
