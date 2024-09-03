@@ -44,7 +44,7 @@ PROTOCOL = config('PROTOCOL')
 SENTRY_ENVIRONMENT = config('SENTRY_ENVIRONMENT')  # production Or "staging", "development", etc.
 SENTRY_DSH_URL = config('SENTRY_DSH_URL')
 
-PROJECT_NAME = 'talent_bridge'
+PROJECT_NAME = 'talent_bridge_cron'
 # ===============================================================================
 
 # Application definition
@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'companies',
     'skills',
     'locations',
+    'scrapy_manager'
 ]
 
 MIDDLEWARE = [
@@ -264,3 +265,10 @@ MAIL_JET_EMAIL_ADDRESS = config('MAIL_JET_EMAIL_ADDRESS')
 #         "LOCATION": config('REDISCLOUD_URL'),
 #     }
 # }
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'

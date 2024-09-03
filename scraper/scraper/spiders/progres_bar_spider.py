@@ -3,12 +3,14 @@ from tqdm import tqdm
 
 class ProgressBarSpider(scrapy.Spider):
     name = "progress_bar_spider"
+
     start_urls = [
         'https://arpansahu.me',
         'https://clock-work.arpansahu.me',
         'https://third-eye.arpansahu.me',
         # Add more URLs as needed
     ]
+
 
     def __init__(self, *args, **kwargs):
         super(ProgressBarSpider, self).__init__(*args, **kwargs)

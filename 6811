@@ -1,0 +1,219 @@
+         945 function calls (923 primitive calls) in 3.325 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        7    0.000    0.000    0.000    0.000 _collections_abc.py:113(__subclasshook__)
+        1    0.000    0.000    0.000    0.000 _constants.py:261(iterconstants)
+        5    0.000    0.000    0.000    0.000 _constants.py:273(<lambda>)
+        4    0.000    0.000    0.001    0.000 _file.py:40(__call__)
+        4    0.000    0.000    0.001    0.000 _file.py:72(formatEvent)
+        4    0.000    0.000    0.000    0.000 _file.py:74(<lambda>)
+        4    0.000    0.000    0.001    0.000 _format.py:114(formatEventAsClassicLogText)
+        4    0.000    0.000    0.000    0.000 _format.py:176(__init__)
+        4    0.000    0.000    0.000    0.000 _format.py:189(__getitem__)
+        4    0.000    0.000    0.000    0.000 _format.py:202(formatWithCall)
+        4    0.000    0.000    0.000    0.000 _format.py:228(_formatEvent)
+        4    0.000    0.000    0.000    0.000 _format.py:280(_formatSystem)
+        4    0.000    0.000    0.001    0.000 _format.py:311(eventAsText)
+        4    0.000    0.000    0.000    0.000 _format.py:80(formatTime)
+        3    0.000    0.000    0.001    0.000 _legacy.py:93(publishToNewObserver)
+        1    0.000    0.000    0.000    0.000 _logger.py:105(emit)
+        1    0.000    0.000    0.000    0.000 _logger.py:207(info)
+        1    0.000    0.000    0.000    0.000 _logger.py:269(<lambda>)
+        1    0.000    0.000    0.000    0.000 _logger.py:41(__init__)
+        1    0.000    0.000    0.000    0.000 _logger.py:70(__get__)
+        4    0.000    0.000    0.001    0.000 _observer.py:57(__call__)
+        1    0.000    0.000    0.000    0.000 _signals.py:184(__init__)
+       14    0.000    0.000    0.000    0.000 _signals.py:192(<lambda>)
+        2    0.000    0.000    0.000    0.000 _signals.py:194(doRead)
+        2    0.000    0.000    0.000    0.000 _signals.py:198(<lambda>)
+        1    0.000    0.000    0.000    0.000 _signals.py:220(wakeUp)
+        1    0.000    0.000    0.000    0.000 _signals.py:247(__init__)
+        1    0.000    0.000    0.000    0.000 _signals.py:250(install)
+        1    0.000    0.000    0.000    0.000 _signals.py:262(doRead)
+        1    0.000    0.000    0.000    0.000 _signals.py:51(installHandler)
+        4    0.000    0.000    0.000    0.000 _tzhelper.py:29(__init__)
+        4    0.000    0.000    0.000    0.000 _tzhelper.py:65(fromLocalTimeStamp)
+        8    0.000    0.000    0.000    0.000 _tzhelper.py:76(utcoffset)
+       12    0.000    0.000    0.000    0.000 _tzhelper.py:82(dst)
+       17    0.000    0.000    0.000    0.000 abc.py:117(__instancecheck__)
+      7/3    0.000    0.000    0.000    0.000 abc.py:121(__subclasscheck__)
+        1    0.000    0.000    0.000    0.000 abstract.py:193(connectionLost)
+        2    0.000    0.000    0.000    0.000 abstract.py:420(stopReading)
+        1    0.000    0.000    0.000    0.000 abstract.py:428(stopWriting)
+        1    0.000    0.000    0.000    0.000 base.py:1039(callFromThread)
+        1    0.000    0.000    0.000    0.000 base.py:1264(_handleSignals)
+        1    0.000    0.000    0.000    0.000 base.py:1289(startRunning)
+        2    0.000    0.000    0.000    0.000 base.py:130(cancel)
+        1    0.000    0.000    0.000    0.000 base.py:1301(_reallyStartRunning)
+        1    0.000    0.000    3.325    3.325 base.py:1316(run)
+        1    0.000    0.000    3.325    3.325 base.py:1320(mainLoop)
+        6    0.000    0.000    0.000    0.000 base.py:193(activate_delay)
+        1    0.000    0.000    0.000    0.000 base.py:197(active)
+        6    0.000    0.000    0.000    0.000 base.py:217(__lt__)
+        1    0.000    0.000    0.000    0.000 base.py:412(addTrigger)
+        2    0.000    0.000    0.000    0.000 base.py:484(fireEvent)
+        2    0.000    0.000    0.000    0.000 base.py:503(_continueFiring)
+        1    0.000    0.000    0.000    0.000 base.py:641(wakeUp)
+        1    0.000    0.000    0.000    0.000 base.py:706(stop)
+        1    0.000    0.000    0.000    0.000 base.py:716(crash)
+        1    0.000    0.000    0.001    0.001 base.py:728(sigInt)
+        1    0.000    0.000    0.000    0.000 base.py:761(disconnectAll)
+        2    0.000    0.000    0.000    0.000 base.py:776(fireSystemEvent)
+        1    0.000    0.000    0.000    0.000 base.py:784(addSystemEventTrigger)
+        1    0.000    0.000    0.000    0.000 base.py:828(startRunning)
+        1    0.000    0.000    0.000    0.000 base.py:850(_reallyStartRunning)
+        4    0.000    0.000    0.000    0.000 base.py:86(__init__)
+        4    0.000    0.000    0.000    0.000 base.py:865(callLater)
+        2    0.000    0.000    0.000    0.000 base.py:905(_cancelCallLater)
+       12    0.000    0.000    0.000    0.000 base.py:918(_insertNewDelayedCalls)
+        6    0.000    0.000    0.000    0.000 base.py:927(timeout)
+        6    0.000    0.000    0.002    0.000 base.py:955(runUntilCurrent)
+        7    0.000    0.000    0.000    0.000 context.py:109(currentContext)
+        2    0.000    0.000    0.000    0.000 context.py:116(callWithContext)
+        5    0.000    0.000    0.000    0.000 context.py:119(getContext)
+        2    0.000    0.000    0.000    0.000 context.py:62(callWithContext)
+        5    0.000    0.000    0.000    0.000 context.py:86(getContext)
+        1    0.000    0.000    0.000    0.000 defer.py:123(succeed)
+        3    0.000    0.000    0.000    0.000 defer.py:1282(__init__)
+      4/3    0.000    0.000    0.000    0.000 defer.py:1352(_cbDeferred)
+        3    0.000    0.000    0.000    0.000 defer.py:177(maybeDeferred)
+        1    0.000    0.000    0.000    0.000 defer.py:245(passthru)
+        5    0.000    0.000    0.000    0.000 defer.py:435(__init__)
+        8    0.000    0.000    0.000    0.000 defer.py:467(addCallbacks)
+        4    0.000    0.000    0.000    0.000 defer.py:518(addCallback)
+      6/4    0.000    0.000    0.001    0.000 defer.py:672(callback)
+      6/4    0.000    0.000    0.001    0.000 defer.py:781(_startRunCallbacks)
+     10/8    0.000    0.000    0.001    0.000 defer.py:809(_runCallbacks)
+        1    0.000    0.000    0.000    0.000 deprecate.py:393(__init__)
+        3    0.000    0.000    0.000    0.000 deprecate.py:396(__getattribute__)
+        1    0.000    0.000    0.000    0.000 deprecate.py:399(__setattr__)
+        1    0.000    0.000    0.000    0.000 deprecate.py:453(__getattribute__)
+        4    0.000    0.000    0.000    0.000 enum.py:359(__call__)
+        4    0.000    0.000    0.000    0.000 enum.py:678(__new__)
+        2    0.000    0.000    0.000    0.000 enum.py:741(_missing_)
+        2    0.000    0.000    0.000    0.000 fdesc.py:24(setNonBlocking)
+        2    0.000    0.000    0.000    0.000 fdesc.py:48(_setCloseOnExec)
+        2    0.000    0.000    0.000    0.000 fdesc.py:65(readFromFD)
+        3    0.000    0.000    0.000    0.000 http.py:307(datetimeToLogString)
+        3    0.000    0.000    0.000    0.000 http.py:3231(_updateLogDateTime)
+        1    0.000    0.000    0.000    0.000 http.py:3265(stopFactory)
+        1    0.000    0.000    0.000    0.000 internet.py:122(stopService)
+        1    0.000    0.000    0.000    0.000 internet.py:317(stopService)
+        1    0.000    0.000    0.000    0.000 internet.py:327(<lambda>)
+        2    0.000    0.000    0.000    0.000 log.py:141(logPrefix)
+        3    0.000    0.000    0.001    0.000 log.py:241(msg)
+        3    0.000    0.000    0.000    0.000 log.py:400(textFromEventDict)
+        2    0.000    0.000    0.000    0.000 log.py:77(callWithContext)
+        2    0.000    0.000    0.000    0.000 log.py:83(callWithLogger)
+        4    0.000    0.000    0.000    0.000 logfile.py:106(flush)
+        4    0.000    0.000    0.000    0.000 logfile.py:179(shouldRotate)
+        4    0.000    0.000    0.000    0.000 logfile.py:194(write)
+        4    0.000    0.000    0.000    0.000 logfile.py:92(write)
+        1    0.000    0.000    0.000    0.000 posixbase.py:137(_handleSignals)
+        1    0.000    0.000    0.000    0.000 posixbase.py:407(_removeAll)
+        2    0.000    0.000    0.000    0.000 process.py:61(reapAllProcesses)
+        1    0.000    0.000    0.000    0.000 protocol.py:76(doStop)
+        3    0.000    0.000    0.000    0.000 reflect.py:418(safe_str)
+        2    0.000    0.000    0.000    0.000 selectreactor.py:146(_doReadOrWrite)
+        1    0.000    0.000    0.000    0.000 selectreactor.py:155(addReader)
+        2    0.000    0.000    0.000    0.000 selectreactor.py:167(removeReader)
+        1    0.000    0.000    0.000    0.000 selectreactor.py:173(removeWriter)
+        1    0.000    0.000    0.000    0.000 selectreactor.py:179(removeAll)
+        6    0.000    0.000    3.322    0.554 selectreactor.py:92(doSelect)
+        4    0.000    0.000    0.000    0.000 service.py:196(stopService)
+        1    0.000    0.000    0.000    0.000 service.py:278(stopService)
+        1    0.000    0.000    0.000    0.000 service.py:290(__iter__)
+        4    0.000    0.000    0.000    0.000 signal.py:24(_int_to_enum)
+        6    0.000    0.000    0.000    0.000 signal.py:34(_enum_to_int)
+        3    0.000    0.000    0.000    0.000 signal.py:54(signal)
+        1    0.000    0.000    0.000    0.000 signal.py:60(getsignal)
+        1    0.000    0.000    0.000    0.000 socket.py:494(_real_close)
+        1    0.000    0.000    0.000    0.000 socket.py:498(close)
+        4    0.000    0.000    0.000    0.000 string.py:163(vformat)
+      8/4    0.000    0.000    0.000    0.000 string.py:169(_vformat)
+        4    0.000    0.000    0.000    0.000 string.py:223(get_value)
+        4    0.000    0.000    0.000    0.000 string.py:230(check_unused_args)
+        4    0.000    0.000    0.000    0.000 string.py:234(format_field)
+        4    0.000    0.000    0.000    0.000 string.py:238(convert_field)
+        8    0.000    0.000    0.000    0.000 string.py:258(parse)
+        4    0.000    0.000    0.000    0.000 string.py:267(get_field)
+        1    0.000    0.000    0.000    0.000 task.py:211(stop)
+        1    0.000    0.000    0.000    0.000 task.py:838(deferLater)
+        1    0.000    0.000    0.001    0.001 task.py:866(cb)
+        1    0.000    0.000    0.000    0.000 tcp.py:1432(loseConnection)
+        1    0.000    0.000    0.000    0.000 tcp.py:1448(_logConnectionLostMsg)
+        1    0.000    0.000    0.001    0.001 tcp.py:1454(connectionLost)
+        1    0.000    0.000    0.000    0.000 tcp.py:153(_closeSocket)
+        1    0.000    0.000    0.000    0.000 threadable.py:104(getThreadID)
+        1    0.000    0.000    0.000    0.000 threadable.py:115(registerAsIOThread)
+        7    0.000    0.000    0.000    0.000 threadable.py:33(_synchPre)
+        7    0.000    0.000    0.000    0.000 threadable.py:42(_synchPost)
+      7/4    0.000    0.000    0.001    0.000 threadable.py:47(sync)
+        1    0.000    0.000    0.000    0.000 threading.py:1145(ident)
+        7    0.000    0.000    0.000    0.000 threading.py:138(acquire)
+        1    0.000    0.000    0.000    0.000 threading.py:1430(current_thread)
+        7    0.000    0.000    0.000    0.000 threading.py:176(release)
+        4    0.000    0.000    0.000    0.000 typing.py:1247(__hash__)
+       31    0.000    0.000    0.000    0.000 typing.py:1737(cast)
+        2    0.000    0.000    0.000    0.000 typing.py:2483(__call__)
+       13    0.000    0.000    0.000    0.000 typing.py:306(inner)
+        1    0.000    0.000    0.000    0.000 util.py:750(untilConcludes)
+       17    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
+      7/3    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
+        4    0.000    0.000    0.000    0.000 {built-in method _heapq.heappop}
+        6    0.000    0.000    0.000    0.000 {built-in method _heapq.heappush}
+        1    0.000    0.000    0.000    0.000 {built-in method _signal.getsignal}
+        1    0.000    0.000    0.000    0.000 {built-in method _signal.set_wakeup_fd}
+        1    0.000    0.000    0.000    0.000 {built-in method _signal.siginterrupt}
+        3    0.000    0.000    0.000    0.000 {built-in method _signal.signal}
+        4    0.000    0.000    0.000    0.000 {built-in method _string.formatter_field_name_split}
+        8    0.000    0.000    0.000    0.000 {built-in method _string.formatter_parser}
+       15    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+       22    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+        4    0.000    0.000    0.000    0.000 {built-in method builtins.format}
+        5    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+        4    0.000    0.000    0.000    0.000 {built-in method builtins.hash}
+       62    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.iter}
+       15    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        6    0.000    0.000    0.000    0.000 {built-in method builtins.max}
+        6    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.repr}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.sorted}
+        8    0.000    0.000    0.000    0.000 {built-in method fcntl.fcntl}
+        8    0.000    0.000    0.000    0.000 {built-in method fromtimestamp}
+        1    0.000    0.000    0.000    0.000 {built-in method posix.pipe}
+        2    0.000    0.000    0.000    0.000 {built-in method posix.read}
+        1    0.000    0.000    0.000    0.000 {built-in method posix.write}
+        6    3.321    0.554    3.322    0.554 {built-in method select.select}
+        3    0.000    0.000    0.000    0.000 {built-in method time.gmtime}
+       23    0.000    0.000    0.000    0.000 {built-in method time.time}
+        4    0.000    0.000    0.000    0.000 {built-in method utcfromtimestamp}
+        1    0.000    0.000    0.000    0.000 {function socket.close at 0x10482df30}
+        7    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+        6    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
+       26    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+        5    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        3    0.000    0.000    0.000    0.000 {method 'discard' of 'set' objects}
+        4    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 {method 'flush' of '_io._IOBase' objects}
+        5    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+       17    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+        4    0.000    0.000    0.000    0.000 {method 'isdigit' of 'str' objects}
+       20    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+       25    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+        7    0.000    0.000    0.000    0.000 {method 'release' of '_thread.lock' objects}
+        4    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'shutdown' of '_socket.socket' objects}
+        4    0.000    0.000    0.000    0.000 {method 'strftime' of 'datetime.date' objects}
+        6    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+        3    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
+        4    0.000    0.000    0.000    0.000 {method 'write' of '_io.FileIO' objects}
+
+
