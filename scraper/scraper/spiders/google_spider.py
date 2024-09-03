@@ -19,27 +19,14 @@ class GoogleJobsSpider(scrapy.Spider):
     # Custom settings specific to this spider
     custom_settings = {
         "LOG_FILE": f"{name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log",
-        "LOG_LEVEL": "INFO",  # Ensure logging level is set appropriately
+        "LOG_LEVEL": "DEBUG",  # Ensure logging level is set appropriately
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,job_id=None, *args, **kwargs):
         super(GoogleJobsSpider, self).__init__(*args, **kwargs)
+        self.job_id = job_id  # Set the job ID here
+        self.logger.info(f"self.job_id: {self.job_id}")
         self.company_name = "Google"  # Set the company name here
-
-        # Setup S3 client using settings from Scrapy and custom MinIO configurations
-        settings = get_project_settings()
-        self.s3_client = boto3.client(
-            's3',
-            aws_access_key_id=settings.get('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=settings.get('AWS_SECRET_ACCESS_KEY'),
-            region_name='us-east-1',  # Use the region name, even though MinIO doesn't require it
-            endpoint_url='https://minio.arpansahu.me'  # Custom endpoint URL for MinIO
-        )
-        
-        # Store the bucket name and other settings for reuse
-        self.bucket_name = settings.get('AWS_STORAGE_BUCKET_NAME')
-        self.profile_name = "portfolio"  # Replace with the actual profile name
-        self.project_name = settings.get('PROJECT_NAME')  # Replace with the actual project name
 
         # Progress bar initialization
         self.progress_bar = tqdm(total=0, desc='Processing Jobs', unit='job')
@@ -84,34 +71,6 @@ class GoogleJobsSpider(scrapy.Spider):
     def spider_closed(self, spider):
         # Close the progress bar
         self.progress_bar.close()
-
-        # Retrieve the log filename from the settings
-        log_file = self.settings.get('LOG_FILE')
-
-        # Upload the log file to S3 after the spider closes
-        upload_successful = self.upload_log_to_s3(log_file)
-        
-        if upload_successful:
-            # Delete the local log file after successful upload
-            try:
-                os.remove(log_file)
-                self.logger.info("Successfully deleted the local log file: %s", log_file)
-            except OSError as e:
-                self.logger.error("Error deleting the log file: %s - %s", log_file, str(e))
-        else:
-            self.logger.error("Failed to upload the log file to S3, so it was not deleted.")
-
-    def upload_log_to_s3(self, file_path):
-        todays_date = datetime.now().strftime('%Y-%m-%d')
-        s3_file_name = f"{self.profile_name}/{self.project_name}/scrapy_logs/{self.name}/{todays_date}/{os.path.basename(file_path)}"
-
-        try:
-            self.s3_client.upload_file(file_path, self.bucket_name, s3_file_name)
-            self.logger.info(f"Successfully uploaded {file_path} to S3 as {s3_file_name}")
-            return True
-        except Exception as e:
-            self.logger.error(f"Failed to upload log file to S3: {e}")
-            return False
 
     async def parse(self, response):
         self.logger.info("Parsing jobs list from %s", response.url)

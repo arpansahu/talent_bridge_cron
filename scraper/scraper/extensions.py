@@ -30,12 +30,13 @@ class SaveCrawlStatsExtension:
     def update_job(self, spider):
         try:
             job_id = spider.job_id
-            log_file_path = spider.settings.get('LOG_FILE')
+            logger.info(f"Updating ScrapyJob Object for {job_id}")
+            log_file = spider.settings.get('LOG_FILE')
 
             if job_id:
                 try:
-                    with open(log_file_path, 'r', encoding='utf-8') as log_file:
-                        log_content = log_file.read()
+                    with open(log_file, 'r', encoding='utf-8') as new_log_file:
+                        log_content = new_log_file.read()
                 except Exception as e:
                     logger.error(f"Failed to read log file: {e}")
                     return
@@ -51,11 +52,9 @@ class SaveCrawlStatsExtension:
                     job.save()
                     logger.info(f"Updated ScrapyJob Object {spider.crawler.stats.get_value('finish_reason')}")
                 
-                logger.info(f"Updated ScrapyJob Object Now its time to delete local log file {log_file_path}")
+                logger.info(f"Updated ScrapyJob Object Now its time to delete local log file {log_file}")
+                os.remove(str(log_file))
 
-                os.remove(log_file)
-                self.logger.info("Successfully deleted the local log file: %s", log_file)
-    
             else:
                 logger.info(f"Not Updated ScrapyJob Object Since job_id is not present, may be this spider is started manually.")
             
